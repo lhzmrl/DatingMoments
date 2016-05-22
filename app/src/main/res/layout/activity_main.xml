@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kylin.datingmoments.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/com_tab_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/com_tab_add"
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/light_background">
+
+        <RelativeLayout
+            android:id="@+id/act_main_rl_home"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/act_main_tv_home"
+                style="@style/TabTextView"
+                android:text="@string/tab_home"
+                android:drawableTop="@drawable/img_tv_home_normal" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:id="@+id/act_main_rl_mine"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/act_main_tv_mine"
+                style="@style/TabTextView"
+                android:text="@string/tab_mine"
+                android:drawableTop="@drawable/img_tv_mine_normal"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/com_tab_view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/shadow"
+        android:layout_above="@id/com_tab_ll"/>
+
+    <com.kylin.datingmoments.widget.NoRollViewPager
+        android:id="@+id/act_main_nrvp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/com_tab_view_shadow"/>
+
+    <ImageView
+        android:id="@+id/act_main_iv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_iv_add"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
