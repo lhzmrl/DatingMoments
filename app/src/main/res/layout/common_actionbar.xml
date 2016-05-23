@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/light_background"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/com_actionbar_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="标题"
+        android:textColor="@color/actionbar_text"
+        android:textSize="26sp"/>
+
+    <View
+        android:id="@+id/com_tab_view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_above="@id/com_tab_ll"
+        android:background="@color/shadow"/>
+
+</LinearLayout>

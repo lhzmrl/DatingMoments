@@ -9,4 +9,9 @@
     <color name="dark_background">#D1D1D1</color>
     <color name="tab_text_normal">#8F8F8F</color>
     <color name="tab_text_press">#FFD500</color>
+
+    <color name="actionbar_text">#212129</color>
+
+    <color name="dark_text_color">#212129</color>
+    <color name="light_text_color">#8F8F8F</color>
 </resources>

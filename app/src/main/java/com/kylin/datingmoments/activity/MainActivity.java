@@ -1,4 +1,4 @@
-package com.kylin.datingmoments;
+package com.kylin.datingmoments.activity;
 
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.adapter.FraPagerAdapter;
 import com.kylin.datingmoments.fragment.HomeFragment;
 import com.kylin.datingmoments.fragment.MineFragment;
@@ -18,6 +19,9 @@ import com.kylin.datingmoments.fragment.MineFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 主界面
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final int MAX_PAGE_NUM = 4;

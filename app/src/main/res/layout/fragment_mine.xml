@@ -1,11 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/fra_mine_title"
+        layout="@layout/common_actionbar"/>
+
+    <LinearLayout
+        android:id="@+id/fra_mine_item_mine"
+        style="@style/MinePagerItem"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="这是 我 页面"/>
+        android:layout_below="@id/fra_mine_title"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-</LinearLayout>
+        <com.kylin.datingmoments.widget.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/img_head_def"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_big"
+                android:textColor="@color/dark_text_color"
+                android:text="请登录"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_def"
+                android:textColor="@color/light_text_color"
+                android:text="登录查看你的精彩空间"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/fra_mine_btn_arrow"
+            style="@style/ArrowButton"/>
+
+    </LinearLayout>
+
+    <Button
+        style="@style/MinePagerItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/setting"
+        android:textColor="@color/light_text_color"
+        android:textSize="@dimen/text_size_mid"
+        android:layout_below="@id/fra_mine_item_mine"/>
+
+</RelativeLayout>

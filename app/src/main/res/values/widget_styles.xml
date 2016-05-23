@@ -6,4 +6,24 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">11sp</item>
     </style>
+
+    <style name="MinePagerItem">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:background">@color/light_background</item>
+    </style>
+
+    <style name="ArrowButton">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:background">@drawable/sel_arrow</item>
+    </style>
+
+    <style name="ThirdPartyLoginButton">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+    </style>
 </resources>
