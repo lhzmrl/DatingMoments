@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVAnalytics;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.adapter.FraPagerAdapter;
 import com.kylin.datingmoments.fragment.HomeFragment;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AVAnalytics.trackAppOpened(getIntent());
         setContentView(R.layout.activity_main);
         initFragment();
         initView();

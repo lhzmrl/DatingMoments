@@ -28,11 +28,27 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.SaveCallback;
 import com.kylin.datingmoments.R;
+import com.kylin.datingmoments.dao.DAO;
+import com.kylin.datingmoments.dao.DAOFactory;
+import com.kylin.datingmoments.entity.DMUser;
+import com.kylin.datingmoments.utils.Logger;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.favorite.WechatFavorite;
+import cn.sharesdk.wechat.moments.WechatMoments;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -56,15 +72,66 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mPbLogining;
     private View mSvForm;
 
-    private OnClickListener mThirdLoginListener = new OnClickListener() {
+    private DAO mDAO = DAOFactory.getDAO();
+
+    /**
+     * 点击第三方登录按钮监听器
+     */
+    private OnClickListener mThirdPartyLoginListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            Platform platform = null;
+            switch (v.getId()) {
+                case R.id.act_login_btn_tencent:
+                    platform = ShareSDK.getPlatform(QQ.NAME);
+                    break;
+                case R.id.act_login_btn_wechat:
+                    platform = ShareSDK.getPlatform(WechatMoments.NAME);
+                    break;
+                case R.id.act_login_btn_weibo:
+                    platform = ShareSDK.getPlatform(SinaWeibo.NAME);
+                    //移除授权
+                    //weibo.removeAccount(true);
+                    break;
+                default:
+                    return;
+            }
+            // 监听第三方登录结果
+            platform.setPlatformActionListener(new PlatformActionListener() {
 
+                @Override
+                public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                    mDAO.attemptLoginByThirdParty(platform, new DAO.LoginCallback() {
+
+                        @Override
+                        public void onSuccess(DMUser user) {
+                            Toast.makeText(getApplicationContext(),"登录成功，用户为："+user.getNickName(),Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onError(AVException exception) {
+                            Toast.makeText(getApplicationContext(),"错误："+exception.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(Platform platform, int i, Throwable throwable) {
+
+                }
+
+                @Override
+                public void onCancel(Platform platform, int i) {
+
+                }
+            });
+            platform.authorize();
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ShareSDK.initSDK(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
@@ -75,14 +142,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void initView() {
         mActvEmail = (AutoCompleteTextView) findViewById(R.id.act_login_actv_email);
-        mActvEmail.clearFocus();
         populateAutoComplete();
 
         TextView mTitle = (TextView) findViewById(R.id.com_actionbar_tv_title);
         mTitle.setText(R.string.title_activity_login);
 
         mEtPwd = (EditText) findViewById(R.id.act_login_et_pwd);
-        mEtPwd.clearFocus();
         mEtPwd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -104,9 +169,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mSvForm = findViewById(R.id.act_login_sv);
         mPbLogining = findViewById(R.id.act_login_pb);
 
-        findViewById(R.id.act_login_btn_tencent).setOnClickListener(mThirdLoginListener);
-        findViewById(R.id.act_login_btn_wechat).setOnClickListener(mThirdLoginListener);
-        findViewById(R.id.act_login_btn_weibo).setOnClickListener(mThirdLoginListener);
+        findViewById(R.id.act_login_btn_tencent).setOnClickListener(mThirdPartyLoginListener);
+        findViewById(R.id.act_login_btn_wechat).setOnClickListener(mThirdPartyLoginListener);
+        findViewById(R.id.act_login_btn_weibo).setOnClickListener(mThirdPartyLoginListener);
 
     }
 
@@ -351,6 +416,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK(this);
     }
 }
 
