@@ -77,7 +77,7 @@ public class AVOSCloudDAO implements DAO{
         @Override
         protected DMUser doInBackground(Platform... params) {
             String platformName = params[0].getName();
-            String openId =  params[0].getDb().getUserId(); // 获取用户在此平台的ID
+            String openId =  params[0].getDb().getUserId();
             List<AVObject> listAVObject = null;
             AVQuery<AVObject> query = new AVQuery<>("DMUser");
             if (QQ.NAME.equals(platformName)){
@@ -103,7 +103,10 @@ public class AVOSCloudDAO implements DAO{
 
         @Override
         protected void onPostExecute(DMUser dmUser) {
-            mLoginCallback.onSuccess(dmUser);
+            if(dmUser!=null)
+                mLoginCallback.onSuccess(dmUser);
+            else
+                mLoginCallback.onError(new AVException(0,"登录失败！"));
         }
     }
 }

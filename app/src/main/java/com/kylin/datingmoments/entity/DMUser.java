@@ -2,13 +2,17 @@ package com.kylin.datingmoments.entity;
 
 import com.avos.avoscloud.AVObject;
 
+import java.io.Serializable;
+
 import cn.sharesdk.tencent.qq.QQ;
 
 /**
  * 用户信息实体类</br>
  * Created by kylin on 16-5-24.
  */
-public class DMUser {
+public class DMUser implements Serializable{
+
+    private long serialVersionUID = 0L;
 
     public static final String OBJECT_ID = "objectId";
     public static final String NICK_NAME = "nickName";

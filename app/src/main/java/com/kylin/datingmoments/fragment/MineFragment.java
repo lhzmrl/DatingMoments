@@ -4,16 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.TextView;
 
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.activity.LoginActivity;
+import com.kylin.datingmoments.app.DMApplication;
+import com.kylin.datingmoments.entity.DMUser;
 
 /**
+ * 个人信息界面
  * Created by kylin on 16-5-22.
  */
 public class MineFragment extends LazyFragment implements View.OnClickListener{
 
+    public static final int REQUEST_CODE_LOGIN = 0X1001;
+
     private View mItemMine;
+    private TextView mTvNickName;
+    private TextView mTvIntroduce;
+
+    private DMUser mUser;
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -22,8 +32,13 @@ public class MineFragment extends LazyFragment implements View.OnClickListener{
     }
 
     private void initView() {
+        TextView title = (TextView) findViewById(R.id.com_actionbar_tv_title);
+        title.setText(R.string.tab_mine);
         mItemMine = findViewById(R.id.fra_mine_item_mine);
         mItemMine.setOnClickListener(this);
+
+        mTvNickName = (TextView) findViewById(R.id.fra_mine_tv_nickname);
+        mTvIntroduce = (TextView) findViewById(R.id.fra_mine_tv_introduce);
     }
 
     @Override
@@ -32,10 +47,32 @@ public class MineFragment extends LazyFragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.fra_mine_item_mine:
                 intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_LOGIN);
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_CODE_LOGIN:
+                tryFillUserInfo();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void tryFillUserInfo(){
+        mUser = ((DMApplication)getApplicationContext()).getUser();
+        if (mUser==null){
+            mTvNickName.setText(R.string.please_login);
+            mTvIntroduce.setText(R.string.login_to_see_more_creditable_content);
+            return;
+        }
+        mTvNickName.setText(mUser.getNickName());
+        mTvIntroduce.setText("");
     }
 }

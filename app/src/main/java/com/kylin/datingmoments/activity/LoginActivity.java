@@ -3,6 +3,7 @@ package com.kylin.datingmoments.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -37,6 +38,7 @@ import java.util.List;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SaveCallback;
 import com.kylin.datingmoments.R;
+import com.kylin.datingmoments.app.DMApplication;
 import com.kylin.datingmoments.dao.DAO;
 import com.kylin.datingmoments.dao.DAOFactory;
 import com.kylin.datingmoments.entity.DMUser;
@@ -57,6 +59,8 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final int RESULT_CODE_FALL = 0;
+    public static final int RESULT_CODE_SUCCESS = 1;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -105,6 +109,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         @Override
                         public void onSuccess(DMUser user) {
+                            ((DMApplication)getApplicationContext()).setUser(user);
+                            onBackPressed();
                             Toast.makeText(getApplicationContext(),"登录成功，用户为："+user.getNickName(),Toast.LENGTH_LONG).show();
                         }
 
@@ -422,6 +428,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mPbLogining.getVisibility() == View.VISIBLE){
+            showProgress(false);
+            return;
+        }
+        super.onBackPressed();
     }
 }
 

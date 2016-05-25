@@ -20,5 +20,7 @@
     </string>
     <string name="register">注册</string>
     <string name="forget_password">忘记密码</string>
+    <string name="please_login">请登录</string>
+    <string name="login_to_see_more_creditable_content">登录查看你的精彩空间</string>
 
 </resources>

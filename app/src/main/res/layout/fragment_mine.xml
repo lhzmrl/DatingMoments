@@ -31,18 +31,20 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/fra_mine_tv_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_big"
                 android:textColor="@color/dark_text_color"
-                android:text="请登录"/>
+                android:text="@string/please_login"/>
 
             <TextView
+                android:id="@+id/fra_mine_tv_introduce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_size_def"
                 android:textColor="@color/light_text_color"
-                android:text="登录查看你的精彩空间"/>
+                android:text="@string/login_to_see_more_creditable_content"/>
         </LinearLayout>
 
         <Button
