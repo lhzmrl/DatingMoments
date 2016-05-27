@@ -46,8 +46,10 @@ public class MineFragment extends LazyFragment implements View.OnClickListener{
         Intent intent;
         switch (v.getId()){
             case R.id.fra_mine_item_mine:
-                intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivityForResult(intent,REQUEST_CODE_LOGIN);
+                if (mUser == null) {
+                    intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_LOGIN);
+                }
                 break;
             default:
                 break;

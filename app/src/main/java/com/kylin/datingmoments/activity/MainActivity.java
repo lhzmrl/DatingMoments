@@ -1,5 +1,6 @@
 package com.kylin.datingmoments.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -92,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener mIvOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(),RecorderActivity.class);
+            startActivity(intent);
 
         }
     };

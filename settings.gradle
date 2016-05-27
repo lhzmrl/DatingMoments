@@ -1,1 +1,1 @@
-include ':app', ':sharesdk', ':avoscloud', ':VitamioRecorderLibrary'
+include ':app', ':sharesdk', ':avoscloud'

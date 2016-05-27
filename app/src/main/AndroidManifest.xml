@@ -21,28 +21,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--ShareSDK要求注册Activity-->
+
+        <!-- ShareSDK要求注册Activity -->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
-                <data android:scheme="tencent1104646053" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="tencent1104646053"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <!--微信分享回调-->
+        <!-- 微信分享回调 -->
         <activity
             android:name="cn.mob.sharesdk.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -52,8 +54,10 @@
         </activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+        </activity>
+        <activity android:name=".activity.RecorderActivity">
         </activity>
     </application>
 
