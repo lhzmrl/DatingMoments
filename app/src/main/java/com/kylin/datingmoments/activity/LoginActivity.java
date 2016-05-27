@@ -28,6 +28,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,8 +75,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private AutoCompleteTextView mActvEmail;
     private EditText mEtPwd;
-    private View mPbLogining;
-    private View mSvForm;
+    private ProgressBar mPbLogining;
+    private ScrollView mSvForm;
 
     private DAO mDAO = DAOFactory.getDAO();
 
@@ -104,24 +106,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             platform.setPlatformActionListener(new PlatformActionListener() {
 
                 @Override
-                public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                    showProgress(true);
-                    mDAO.attemptLoginByThirdParty(platform, new DAO.LoginCallback() {
-
+                public void onComplete(final Platform platform, int i, HashMap<String, Object> hashMap) {
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void onSuccess(DMUser user) {
-                            ((DMApplication)getApplicationContext()).setUser(user);
-                            showProgress(false);
-                            onBackPressed();
-                            Toast.makeText(getApplicationContext(),"登录成功，用户为："+user.getNickName(),Toast.LENGTH_LONG).show();
-                        }
+                        public void run() {
+                            showProgress(true);
+                            mDAO.attemptLoginByThirdParty(platform, new DAO.LoginCallback() {
 
-                        @Override
-                        public void onError(AVException exception) {
-                            showProgress(false);
-                            Toast.makeText(getApplicationContext(),"错误："+exception.getMessage(),Toast.LENGTH_LONG).show();
+                                @Override
+                                public void onSuccess(DMUser user) {
+                                    ((DMApplication)getApplicationContext()).setUser(user);
+                                    showProgress(false);
+                                    onBackPressed();
+                                    Toast.makeText(getApplicationContext(),"登录成功，用户为："+user.getNickName(),Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onError(AVException exception) {
+                                    showProgress(false);
+                                    Toast.makeText(getApplicationContext(),"错误："+exception.getMessage(),Toast.LENGTH_LONG).show();
+                                }
+                            });
+
                         }
                     });
+
                 }
 
                 @Override
@@ -175,8 +184,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mSvForm = findViewById(R.id.act_login_sv);
-        mPbLogining = findViewById(R.id.act_login_pb);
+        mSvForm = (ScrollView) findViewById(R.id.act_login_sv);
+        mPbLogining = (ProgressBar) findViewById(R.id.act_login_pb);
 
         findViewById(R.id.act_login_btn_tencent).setOnClickListener(mThirdPartyLoginListener);
         findViewById(R.id.act_login_btn_wechat).setOnClickListener(mThirdPartyLoginListener);
