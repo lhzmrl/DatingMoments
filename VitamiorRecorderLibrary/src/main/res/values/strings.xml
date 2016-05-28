@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">VitamioRecorderLibrary</string>
+    <string name="imageview_content_description"></string>
+</resources>

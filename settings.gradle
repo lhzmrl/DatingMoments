@@ -1,1 +1,1 @@
-include ':app', ':ShareSDKLibrary', ':AVOSCloudLibrary'
+include ':app', ':ShareSDKLibrary', ':AVOSCloudLibrary', ':VitamiorRecorderLibrary'

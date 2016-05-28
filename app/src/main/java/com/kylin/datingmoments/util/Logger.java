@@ -1,4 +1,4 @@
-package com.kylin.datingmoments.utils;
+package com.kylin.datingmoments.util;
 
 import android.util.Log;
 

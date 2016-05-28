@@ -3,7 +3,6 @@ package com.kylin.datingmoments.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -26,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -38,20 +36,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.SaveCallback;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.app.DMApplication;
 import com.kylin.datingmoments.dao.DAO;
 import com.kylin.datingmoments.dao.DAOFactory;
 import com.kylin.datingmoments.entity.DMUser;
-import com.kylin.datingmoments.utils.Logger;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.wechat.favorite.WechatFavorite;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
 import static android.Manifest.permission.READ_CONTACTS;

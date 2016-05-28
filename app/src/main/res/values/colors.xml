@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="yellow">#ffc800</color>
+    <color name="title_black_color">#23232b</color>
+    <color name="text_gray2">#ffC3C3C3</color>
+    <color name="green">#0ff0ff</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparent_black_85">#DA000000</color>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
@@ -14,4 +21,6 @@
 
     <color name="dark_text_color">#212129</color>
     <color name="light_text_color">#8F8F8F</color>
+
+    <color name="camera_bottom_press_bg">#1b1c1f</color>
 </resources>
