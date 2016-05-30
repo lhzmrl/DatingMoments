@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="这是 主页 页面"/>
+    <include
+        layout="@layout/common_actionbar"/>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fra_home_srl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fra_home_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/video_cover_padding"
+            android:paddingRight="@dimen/video_cover_padding"
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

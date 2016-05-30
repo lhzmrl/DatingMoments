@@ -44,4 +44,8 @@
     <string name="record_preview_encoding_format">转码中\t%d%%</string>
     <string name="delete_onlinemusic_message">是否删除已下载音乐？</string>
 
+    <string name="release">发布</string>
+    <string name="splash_statement">Copyright © 2016 KyleLee All rights reserved</string>
+    <string name="please_type_video_describe">请输入视频描述！</string>
+
 </resources>

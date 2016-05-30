@@ -1032,7 +1032,7 @@ public class MediaPreviewActivity extends BaseActivity implements OnClickListene
 			hideProgress();
 			mStartEncoding = false;
 			// TODO 跳转预览
-			startActivity(new Intent(MediaPreviewActivity.this, VideoPlayerActivity.class).putExtra(Constant.RECORD_VIDEO_PATH, mVideoPath).putExtra(Constant.RECORD_VIDEO_CAPTURE, mCoverPath));
+			startActivity(new Intent(MediaPreviewActivity.this, ReleaseActivity.class).putExtra(Constant.RECORD_VIDEO_PATH, mVideoPath).putExtra(Constant.RECORD_VIDEO_CAPTURE, mCoverPath));
 			finish();
 		}
 

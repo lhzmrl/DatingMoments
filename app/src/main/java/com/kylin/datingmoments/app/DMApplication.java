@@ -4,9 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.kylin.datingmoments.R;
+import com.kylin.datingmoments.dao.DataLogic;
 import com.kylin.datingmoments.entity.DMUser;
 import com.yixia.camera.demo.service.AssertService;
 import com.yixia.weibo.sdk.VCamera;
@@ -25,6 +28,10 @@ public class DMApplication extends Application {
     private static DMApplication application;
 
     private DMUser mUser;
+
+    public static DMApplication getInstance() {
+        return application;
+    }
 
     @Override
     public void onCreate() {
@@ -48,9 +55,11 @@ public class DMApplication extends Application {
         VCamera.setDebugMode(true);
         // 初始化拍摄SDK，必须
         VCamera.initialize(this);
+        Fresco.initialize(this);
 
         //解压assert里面的文件
         startService(new Intent(this, AssertService.class));
+        DataLogic.setBaseApplication(this);
     }
 
 
@@ -96,5 +105,13 @@ public class DMApplication extends Application {
 
     public DMUser getUser(){
         return mUser;
+    }
+
+    public void showCustomToast(int resId) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+    }
+
+    public void showCustomToast(String res) {
+        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
     }
 }

@@ -20,6 +20,7 @@ public class DMUser implements Serializable{
     public static final String WEIBO_USER_ID = "weiboUserId";
     public static final String QQ_USER_ID = "qqUserId";
     public static final String WECHAT_USER_ID = "wechatUserId";
+    public static final String USER_ICON = "userIcon";
 
     private String objectId;
     private String nickName;
@@ -27,6 +28,7 @@ public class DMUser implements Serializable{
     private String weiboUserId;
     private String qqUserId;
     private String wechatUserId;
+    private String userIcon;
 
     public String getObjectId() {
         return objectId;
@@ -76,6 +78,14 @@ public class DMUser implements Serializable{
         this.wechatUserId = wechatUserId;
     }
 
+    public String getUserIcon() {
+        return userIcon;
+    }
+
+    public void setUserIcon(String userIcon) {
+        this.userIcon = userIcon;
+    }
+
     public static DMUser parse(AVObject avObject){
         DMUser user = new DMUser();
         user.setObjectId(avObject.getObjectId());
@@ -84,6 +94,7 @@ public class DMUser implements Serializable{
         user.setQQUserId(avObject.getString(QQ_USER_ID));
         user.setWechatUserId(avObject.getString(WECHAT_USER_ID));
         user.setWeiboUserId(avObject.getString(WEIBO_USER_ID));
+        user.setUserIcon(avObject.getString(USER_ICON));
         return user;
     }
 }

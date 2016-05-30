@@ -3,6 +3,9 @@ package com.kylin.datingmoments.dao;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.SaveCallback;
 import com.kylin.datingmoments.entity.DMUser;
+import com.kylin.datingmoments.entity.VideoInfo;
+
+import java.util.List;
 
 import cn.sharesdk.framework.Platform;
 
@@ -23,8 +26,22 @@ public interface DAO {
      */
     public DMUser registerByThirdParty(Platform platform) throws AVException;
 
+    public void uploadVideo(String videoPath,String thumbnailPath,String desc,DMUser user,UploadVideoCallback uploadVideoCallback);
+
+    public void getVideoList(GetVideoCallback getVideoCallback);
+
     interface LoginCallback{
         public void onSuccess(DMUser user);
         public void onError(AVException exception);
+    }
+
+    interface UploadVideoCallback{
+        public void onSuccess();
+        public void onError();
+    }
+
+    interface GetVideoCallback{
+        public void onSuccess(List<VideoInfo> result);
+        public void onError();
     }
 }

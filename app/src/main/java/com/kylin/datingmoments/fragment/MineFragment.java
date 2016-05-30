@@ -39,6 +39,7 @@ public class MineFragment extends LazyFragment implements View.OnClickListener{
 
         mTvNickName = (TextView) findViewById(R.id.fra_mine_tv_nickname);
         mTvIntroduce = (TextView) findViewById(R.id.fra_mine_tv_introduce);
+        tryFillUserInfo();
     }
 
     @Override

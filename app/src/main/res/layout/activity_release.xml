@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kylin.datingmoments.activity.ReleaseActivity">
+
+    <include
+        android:id="@+id/act_release_title"
+        layout="@layout/common_actionbar"/>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/act_release_iv_cover"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/act_release_title"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/act_release_et_desc"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/act_release_iv_cover"/>
+
+    <Button
+        android:id="@+id/act_release_btn_release"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/act_release_et_desc"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/release"/>
+
+    <ProgressBar
+        android:id="@+id/act_release_pb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>
