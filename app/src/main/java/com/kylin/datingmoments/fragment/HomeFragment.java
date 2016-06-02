@@ -78,8 +78,7 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL);
         mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        Logger.e(BitmapUtils.dipTopx(getApplicationContext(),getResources().getDimension(R.dimen.video_cover_padding))+"-------adsfasf");
-        mRecyclerView.addItemDecoration(new SpaceItemDecoration(BitmapUtils.dipTopx(getApplicationContext(),getResources().getDimension(R.dimen.video_cover_padding))));
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.video_cover_padding)));
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
@@ -123,9 +122,9 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
 
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//            outRect.left = space;
-//            outRect.top = space * 2;
-//            outRect.right = space;
+            outRect.left = space;
+            outRect.top = space * 2;
+            outRect.right = space;
         }
     }
 

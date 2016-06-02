@@ -113,7 +113,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="65dip"
-        android:background="#1e1e1e"
+        android:background="@color/light_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="visible"
@@ -154,7 +154,7 @@
         android:id="@+id/edit_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#1e1e1e"
+        android:background="@color/light_background"
         android:orientation="vertical" >
 
         <HorizontalScrollView
@@ -162,7 +162,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1.0"
-            android:background="@color/black"
+            android:background="@color/light_background"
             android:scrollbars="none" >
 
             <org.vitamio.vitamiorecorderlibrary.view.ThemeGroupLayout
@@ -179,7 +179,7 @@
             android:layout_width="fill_parent"
             android:layout_height="0dip"
             android:layout_weight="1.0"
-            android:background="@color/black"
+            android:background="@color/light_background"
             android:scrollbars="none"
             android:visibility="gone" >
 
@@ -191,12 +191,17 @@
                 android:orientation="horizontal" >
             </org.vitamio.vitamiorecorderlibrary.view.ThemeGroupLayout>
         </HorizontalScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_above="@id/com_tab_ll"
+            android:background="@color/shadow"/>
 <!-- 主题和滤镜tab -->
         <RadioGroup
             android:id="@+id/main_radio"
             android:layout_width="fill_parent"
             android:layout_height="40dip"
-            android:background="#1E1E1E"
+            android:background="@color/light_background"
             android:gravity="center"
             android:orientation="horizontal"
             android:visibility="visible" >

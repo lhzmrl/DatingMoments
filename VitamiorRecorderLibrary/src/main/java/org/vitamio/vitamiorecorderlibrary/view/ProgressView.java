@@ -215,4 +215,9 @@ public class ProgressView extends View {
 	public void stop() {
 		mProgressChanged = false;
 	}
+
+	@Override
+	public boolean isInEditMode() {
+		return true;
+	}
 }

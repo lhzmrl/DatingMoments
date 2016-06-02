@@ -7,5 +7,7 @@
     <dimen name="text_size_def">16sp</dimen>
     <dimen name="text_size_mid">18sp</dimen>
     <dimen name="text_size_big">20sp</dimen>
-    <dimen name="video_cover_padding">1dp</dimen>
+    <dimen name="video_cover_padding">2dp</dimen>
+
+    <integer name="max_desc_word_num">110</integer>
 </resources>

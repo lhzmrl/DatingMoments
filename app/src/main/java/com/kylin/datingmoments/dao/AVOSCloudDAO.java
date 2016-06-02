@@ -170,7 +170,11 @@ public class AVOSCloudDAO implements DAO{
 
         @Override
         protected void onPostExecute(Boolean result) {
-            mUploadVideoCallback.onSuccess();
+            if (result)
+                mUploadVideoCallback.onSuccess();
+            else{
+                mUploadVideoCallback.onError();
+            }
         }
     }
 

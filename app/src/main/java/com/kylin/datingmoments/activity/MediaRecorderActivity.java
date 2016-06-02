@@ -126,8 +126,8 @@ public class MediaRecorderActivity extends BaseActivity implements com.yixia.wei
         mWindowWidth = DeviceUtils.getScreenWidth(this);
 
         mFocusWidth = ConvertToUtils.dipToPX(this, 64);
-        mBackgroundColorNormal = getResources().getColor(R.color.black);//camera_bottom_bg
-        mBackgroundColorPress = getResources().getColor(R.color.camera_bottom_press_bg);
+        mBackgroundColorNormal = getResources().getColor(R.color.light_background);//camera_bottom_bg
+        mBackgroundColorPress = getResources().getColor(R.color.light_background);
     }
 
     /** 加载视图 */
@@ -184,7 +184,7 @@ public class MediaRecorderActivity extends BaseActivity implements com.yixia.wei
     /** 初始化画布 */
     private void initSurfaceView() {
         final int w = DeviceUtils.getScreenWidth(this);
-        ((RelativeLayout.LayoutParams) mBottomLayout.getLayoutParams()).topMargin = w;
+        ((RelativeLayout.LayoutParams) mProgressView.getLayoutParams()).topMargin = w;
         int width = w;
         int height = w * 4 / 3;
         //

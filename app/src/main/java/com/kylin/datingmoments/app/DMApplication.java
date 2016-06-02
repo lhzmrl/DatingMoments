@@ -52,9 +52,9 @@ public class DMApplication extends Application {
             VCamera.setVideoCachePath(dcim + "/Camera/VCameraDemo/");
         }
         // 开启log输出,ffmpeg输出到logcat
-        VCamera.setDebugMode(true);
-        // 初始化拍摄SDK，必须
+        VCamera.setDebugMode(false);
         VCamera.initialize(this);
+        // 初始化拍摄SDK，必须
         Fresco.initialize(this);
 
         //解压assert里面的文件

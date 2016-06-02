@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kylin.datingmoments.R;
+import com.kylin.datingmoments.app.DMApplication;
 import com.kylin.datingmoments.common.CommonIntentExtra;
 import com.kylin.datingmoments.util.Constant;
 import com.yixia.camera.demo.log.Logger;
@@ -78,8 +79,9 @@ public class MediaPreviewActivity extends BaseActivity implements OnClickListene
 
 	/** 播放按钮、主题音量按钮 */
 	private ImageView mPlayStatus;
+	private ImageView mIvBack,mIvNext;
 	/** 上一步、下一步 */
-	private TextView mTitleLeft, mTitleNext, mVideoPreviewMusic, localMusicText;
+	private TextView mVideoPreviewMusic, localMusicText;
 	/** 主题音乐，原声音 */
 	private CheckBox mThemeVolumn, mVideoVolumn;
 	/** 正在加载 */
@@ -170,8 +172,8 @@ public class MediaPreviewActivity extends BaseActivity implements OnClickListene
 		// 绑定控件
 		mPlayStatus = (ImageView) findViewById(R.id.play_status);
 		mThemeSufaceView = (SurfaceView) findViewById(R.id.preview_theme);
-		mTitleLeft = (TextView) findViewById(R.id.titleLeft);
-		mTitleNext = (TextView) findViewById(R.id.titleRight);
+		mIvBack = (ImageView) findViewById(R.id.title_back);
+		mIvNext = (ImageView) findViewById(R.id.title_next);
 		mVideoPreviewMusic = (TextView) findViewById(R.id.video_preview_music);
 		mThemes = (ThemeGroupLayout) findViewById(R.id.themes);
 		mFilters = (ThemeGroupLayout) findViewById(R.id.filters);
@@ -193,8 +195,8 @@ public class MediaPreviewActivity extends BaseActivity implements OnClickListene
 		localmusicLayout = (LinearLayout) findViewById(R.id.local_musiclayout);
 
 		mVideoPreviewMusic.setOnClickListener(this);
-		mTitleLeft.setOnClickListener(this);
-		mTitleNext.setOnClickListener(this);
+		mIvBack.setOnClickListener(this);
+		mIvNext.setOnClickListener(this);
 		// mTitleText.setOnClickListener(this);
 		// mTitleText2.setOnClickListener(this);
 		mThemeSufaceView.setOnClickListener(this);
@@ -204,14 +206,13 @@ public class MediaPreviewActivity extends BaseActivity implements OnClickListene
 		mVideoVolumn.setOnClickListener(this);
 
 		// mTitleText.setText(R.string.record_camera_preview_title);
-		mTitleNext.setText(R.string.record_camera_preview_next);
 		/** 设置播放区域 */
 		View preview_layout = findViewById(R.id.preview_layout);
 		LinearLayout.LayoutParams mPreviewParams = (LinearLayout.LayoutParams) preview_layout.getLayoutParams();
 		mPreviewParams.height = DeviceUtils.getScreenWidth(this);
 
 		videoProcessEngine = VideoProcessEngine.createVideoProcessEngine(mVideoTempPath, mThemeSufaceView.getHolder(), this);
-		videoProcessEngine.setVideoAuthor("aaaaa");
+		videoProcessEngine.setVideoAuthor(((DMApplication)getApplicationContext()).getUser().getNickName());
 		//不添加以下两行代码，视频不会进行裁剪，使用滤镜后按原宽高输出
 		videoProcessEngine.setIsImportVideo(isImportVideo);
 		videoProcessEngine.setMediaObject(mMediaObject);
@@ -370,10 +371,10 @@ public class MediaPreviewActivity extends BaseActivity implements OnClickListene
 		case R.id.localmusic:
 			showLocalMusicList();
 			break;
-		case R.id.titleLeft:
+		case R.id.title_back:
 			finish();
 			break;
-		case R.id.titleRight:
+		case R.id.title_next:
 			startEncoding();
 			break;
 		case R.id.preview_theme:// 点击暂停视频播放

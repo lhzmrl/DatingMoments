@@ -47,5 +47,7 @@
     <string name="release">发布</string>
     <string name="splash_statement">Copyright © 2016 KyleLee All rights reserved</string>
     <string name="please_type_video_describe">请输入视频描述！</string>
+    <string name="upload_error">上传错误！</string>
+    <string name="preview">预览</string>
 
 </resources>
