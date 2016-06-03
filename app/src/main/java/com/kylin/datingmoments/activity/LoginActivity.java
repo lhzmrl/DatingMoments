@@ -3,6 +3,7 @@ package com.kylin.datingmoments.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -34,13 +35,17 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.avos.avoscloud.AVException;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.app.DMApplication;
+import com.kylin.datingmoments.common.SPOperater;
 import com.kylin.datingmoments.dao.DAO;
 import com.kylin.datingmoments.dao.DAOFactory;
 import com.kylin.datingmoments.entity.DMUser;
+import com.kylin.datingmoments.util.MD5Util;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -62,6 +67,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+
+    private String mLoginType="";
 
     /**
      * 登录的异步线程
@@ -85,14 +92,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             switch (v.getId()) {
                 case R.id.act_login_btn_tencent:
                     platform = ShareSDK.getPlatform(QQ.NAME);
+                    mLoginType = QQ.NAME;
                     break;
                 case R.id.act_login_btn_wechat:
                     platform = ShareSDK.getPlatform(WechatMoments.NAME);
+                    mLoginType = WechatMoments.NAME;
                     break;
                 case R.id.act_login_btn_weibo:
                     platform = ShareSDK.getPlatform(SinaWeibo.NAME);
-                    //移除授权
-                    //weibo.removeAccount(true);
+                    mLoginType = SinaWeibo.NAME;
                     break;
                 default:
                     return;
@@ -113,6 +121,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     ((DMApplication)getApplicationContext()).setUser(user);
                                     showProgress(false);
                                     onBackPressed();
+                                    SPOperater.setLoginInfo(getApplicationContext(),mLoginType);
                                     Toast.makeText(getApplicationContext(),"登录成功，用户为："+user.getNickName(),Toast.LENGTH_LONG).show();
                                 }
 
@@ -185,6 +194,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         findViewById(R.id.act_login_btn_tencent).setOnClickListener(mThirdPartyLoginListener);
         findViewById(R.id.act_login_btn_wechat).setOnClickListener(mThirdPartyLoginListener);
         findViewById(R.id.act_login_btn_weibo).setOnClickListener(mThirdPartyLoginListener);
+        findViewById(R.id.act_login_tv_register).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
+            }
+        });
 
     }
 
@@ -281,8 +296,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: 使用正则表达式进行更精细验证。
-        return email.contains("@");
+        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern regex = Pattern.compile(check);
+        Matcher matcher = regex.matcher(email);
+        boolean isMatched = matcher.matches();
+        return isMatched;
     }
 
     /**
@@ -293,7 +311,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private boolean isPasswordValid(String password) {
         //TODO: 根据情况进行更精细验证。
-        return password.length() > 4;
+        return password.length()>4;
     }
 
     /**
@@ -387,7 +405,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * 用户登录的异步线程
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, DMUser> {
 
         private final String mEmail;
         private final String mPassword;
@@ -398,25 +416,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: 联网验证登录
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-            // TODO 获取并存储用户信息
-
-            return true;
+        protected DMUser doInBackground(Void... params) {
+            DMUser user = mDAO.attemptLoginByEmail(mEmail,MD5Util.encryptToMd5(mPassword));
+            return user;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(DMUser result) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (result!=null) {
+                ((DMApplication)getApplicationContext()).setUser(result);
+                SPOperater.setLoginInfo(getApplicationContext(),"email");
+                SPOperater.saveUserInfo(getApplicationContext(),result.getNickName(),result.getEmail(), MD5Util.encryptToMd5(mPassword));
                 finish();
             } else {
                 mEtPwd.setError(getString(R.string.error_incorrect_password));

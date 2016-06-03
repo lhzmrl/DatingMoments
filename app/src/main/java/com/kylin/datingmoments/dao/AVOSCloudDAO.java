@@ -16,6 +16,7 @@ import com.kylin.datingmoments.entity.UploadVideoResult;
 import com.kylin.datingmoments.entity.VideoInfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.sharesdk.framework.Platform;
@@ -38,19 +39,63 @@ public class AVOSCloudDAO implements DAO{
         avUser.put(DMUser.WECHAT_USER_ID,user.getWechatUserId());
         avUser.put(DMUser.WEIBO_USER_ID,user.getWeiboUserId());
         avUser.put(DMUser.USER_ICON,user.getUserIcon());
+        avUser.put(DMUser.PWD,user.getPwd());
         try {
             avUser.save();
         } catch (AVException e) {
             e.printStackTrace();
             return null;
         }
-        return user;
+        return DMUser.parse(avUser);
+    }
+
+    @Override
+    public DMUser attemptLoginByEmail(String email, String pwd) {
+        List<AVObject> listAVObject = null;
+        final AVQuery<AVObject> priorityQuery = new AVQuery<>(TableName.USER);
+        priorityQuery.whereEqualTo(DMUser.EMAIL, email);
+        final AVQuery<AVObject> statusQuery = new AVQuery<>(TableName.USER);
+        statusQuery.whereEqualTo(DMUser.PWD, pwd);
+        AVQuery<AVObject> query = AVQuery.and(Arrays.asList(priorityQuery, statusQuery));
+        try {
+            listAVObject = query.find();
+        } catch (AVException e) {
+            e.printStackTrace();
+        }
+        if (listAVObject!=null && listAVObject.size()>0){
+            AVObject avObject = listAVObject.get(0);
+            return DMUser.parse(avObject);
+        }else{
+            return null;
+        }
+
     }
 
     @Override
     public void attemptLoginByThirdParty(Platform platform,LoginCallback loginCallback) {
-        ThirdPartyLoginTask thirdPartyLoginTask = new ThirdPartyLoginTask(loginCallback);
-        thirdPartyLoginTask.execute(platform);
+        new ThirdPartyLoginTask(loginCallback).execute(platform);
+    }
+
+    @Override
+    public boolean isUserInfoExist(DMUser user) {
+        final AVQuery<AVObject> priorityQuery = new AVQuery<>(TableName.USER);
+        priorityQuery.whereEqualTo(DMUser.NICK_NAME, user.getNickName());
+        final AVQuery<AVObject> statusQuery = new AVQuery<>(TableName.USER);
+        if (user.getEmail().equals(""))
+            statusQuery.whereEqualTo(DMUser.EMAIL, "temp");
+        else
+            statusQuery.whereEqualTo(DMUser.EMAIL, user.getEmail());
+
+        AVQuery<AVObject> query = AVQuery.or(Arrays.asList(priorityQuery, statusQuery));
+        try {
+            List<AVObject> list = query.find();
+            if (list.size()>0)
+                return true;
+            return false;
+        } catch (AVException e) {
+            e.printStackTrace();
+            return true;
+        }
     }
 
     @Override
@@ -105,6 +150,7 @@ public class AVOSCloudDAO implements DAO{
             }else if (SinaWeibo.NAME.equals(platformName)){
                 query.whereEqualTo(DMUser.WEIBO_USER_ID, openId);
             }else{
+                return null;
             }
             try {
                 listAVObject = query.find();

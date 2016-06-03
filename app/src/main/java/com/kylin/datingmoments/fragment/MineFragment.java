@@ -9,7 +9,12 @@ import android.widget.TextView;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.activity.LoginActivity;
 import com.kylin.datingmoments.app.DMApplication;
+import com.kylin.datingmoments.common.SPOperater;
 import com.kylin.datingmoments.entity.DMUser;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
 
 /**
  * 个人信息界面
@@ -39,6 +44,7 @@ public class MineFragment extends LazyFragment implements View.OnClickListener{
 
         mTvNickName = (TextView) findViewById(R.id.fra_mine_tv_nickname);
         mTvIntroduce = (TextView) findViewById(R.id.fra_mine_tv_introduce);
+        findViewById(R.id.fra_mine_item_log_off).setOnClickListener(this);
         tryFillUserInfo();
     }
 
@@ -51,6 +57,18 @@ public class MineFragment extends LazyFragment implements View.OnClickListener{
                     intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivityForResult(intent, REQUEST_CODE_LOGIN);
                 }
+                break;
+            case R.id.fra_mine_item_log_off:
+                ((DMApplication)getApplicationContext()).setUser(null);
+                String loginType = SPOperater.getLoginInfo(getApplicationContext());
+                if (!loginType.equals("") && !loginType.equals("email")){
+                    ShareSDK.initSDK(getApplicationContext());
+                    Platform platform = ShareSDK.getPlatform(loginType);
+                    platform.removeAccount(true);
+                    ShareSDK.stopSDK(getApplicationContext());
+                }
+                SPOperater.setLoginInfo(getApplicationContext(),"");
+                tryFillUserInfo();
                 break;
             default:
                 break;

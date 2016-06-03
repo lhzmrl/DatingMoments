@@ -1,7 +1,7 @@
 package com.kylin.datingmoments.common;
 
 public class NetConfig {
-	public static final String SERVICE_IP = "192.16.137.1:8080";
+	public static final String SERVICE_IP = "192.168.1.102:8080";
 	public static final String SERVICE_URL = "http://" + SERVICE_IP
 			+ "/axis2/services/DatingMomentsServer?wsdl";
 	/** 命名空间  */

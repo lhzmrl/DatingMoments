@@ -15,7 +15,11 @@ import cn.sharesdk.framework.Platform;
  */
 public interface DAO {
 
+    public DMUser attemptLoginByEmail(String email,String pwd);
+
     public void attemptLoginByThirdParty(Platform platform,LoginCallback loginCallback);
+
+    public boolean isUserInfoExist(DMUser user);
 
     public DMUser register(DMUser user );
 

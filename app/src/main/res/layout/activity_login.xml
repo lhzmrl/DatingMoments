@@ -84,6 +84,7 @@
                     android:textSize="@dimen/text_size_mid"/>
 
                 <TextView
+                    android:id="@+id/act_login_tv_register"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

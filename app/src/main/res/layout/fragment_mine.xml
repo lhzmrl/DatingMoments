@@ -54,10 +54,11 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/fra_mine_item_log_off"
         style="@style/MinePagerItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/setting"
+        android:text="@string/log_off"
         android:textColor="@color/light_text_color"
         android:textSize="@dimen/text_size_mid"
         android:layout_below="@id/fra_mine_item_mine"/>
