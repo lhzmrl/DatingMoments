@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <SurfaceView
+        android:id="@+id/short_video_view_surfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+    <LinearLayout
+        android:id="@+id/short_video_view_layout_big_controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/short_video_view_tv_current_time"
+            style="@style/MeidaController_Time_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="@string/default_time_text"/>
+
+        <SeekBar
+            android:id="@+id/short_video_view_sb_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
+
+        <TextView
+            android:id="@+id/short_video_view_tv_total_time"
+            style="@style/MeidaController_Time_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_time_text"
+            android:padding="3dp"/>
+
+        <ImageView
+            android:id="@+id/short_video_view_iv_full_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/full_screen_selector"
+            android:padding="3dp"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/short_video_view_pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
