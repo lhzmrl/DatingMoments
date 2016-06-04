@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/light_background"
     >
 
@@ -19,29 +19,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/rvi_video_info_sdv_cover"
+        android:layout_marginBottom="5dp"
         android:gravity="bottom"
         android:orientation="horizontal"
-        android:paddingLeft="14dp"
-        android:layout_marginBottom="5dp">
+        android:paddingLeft="14dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/rvi_video_info_sdv_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginRight="4dp"
             fresco:roundAsCircle="true"
             fresco:roundingBorderColor="@color/light_background"
             fresco:roundingBorderWidth="4dp"
-            android:layout_marginRight="4dp"
             />
 
         <TextView
             android:id="@+id/rvi_video_info_tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             android:textColor="@color/light_text_color"
-            android:textSize="16sp"
-            android:layout_marginBottom="2dp"/>
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
@@ -50,10 +50,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/user_info"
-        android:maxLines="3"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="12dp"
         android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:maxLines="3"
         android:textColor="@color/dark_text_color"
         android:textSize="18sp"/>
 

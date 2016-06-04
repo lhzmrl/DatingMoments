@@ -55,5 +55,6 @@
     <string name="upload_error">上传错误！</string>
     <string name="preview">预览</string>
     <string name="user_name">用户名</string>
+    <string name="send_out">发送</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.kylin.datingmoments.entity;
 
 import com.avos.avoscloud.AVObject;
 import com.kylin.datingmoments.common.NetConfig;
+import com.kylin.datingmoments.common.TableName;
 
 /**
  * Created by kylin on 16-5-29.
@@ -10,17 +11,27 @@ public class VideoInfo {
 
     private static final String VIDEO_SERVER_ADDRESS = "http://"+NetConfig.VIDEO_SERVER;
 
+    public static final String OBJECT_ID = "objectId";
     public static final String USER_NAME = "userName";
     public static final String VIDEO_PATH = "videoPath";
-    public static final String  COVER_PATH= "coverPath";
+    public static final String COVER_PATH= "coverPath";
     public static final String DESC = "desc";
     public static final String USER_ICON = "userIcon";
 
+    private String objectId;
     private String userName;
     private String videoPath;
     private String coverPath;
     private String desc;
     private String userIcon;
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
 
     public String getUserName() {
         return userName;
@@ -65,6 +76,7 @@ public class VideoInfo {
     public static VideoInfo parse(AVObject object){
         VideoInfo info = new VideoInfo();
         AVObject user = object.getAVObject("user");
+        info.setObjectId(object.getObjectId());
         info.setUserName(user.getString(DMUser.NICK_NAME));
         info.setUserIcon(user.getString(DMUser.USER_ICON));
         info.setVideoPath(object.getString(VIDEO_PATH));

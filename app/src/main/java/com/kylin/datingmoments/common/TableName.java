@@ -7,4 +7,5 @@ public class TableName {
 
     public static final String USER = "DMUser";
     public static final String VIDEO = "Video";
+    public static final String COMMENT = "Comment";
 }

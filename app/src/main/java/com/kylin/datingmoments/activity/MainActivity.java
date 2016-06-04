@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVAnalytics;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.adapter.FraPagerAdapter;
+import com.kylin.datingmoments.app.DMApplication;
+import com.kylin.datingmoments.entity.DMUser;
 import com.kylin.datingmoments.fragment.HomeFragment;
 import com.kylin.datingmoments.fragment.MineFragment;
 
@@ -92,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener mIvOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            DMUser user = ((DMApplication) getApplicationContext()).getUser();
+            if (user==null){
+                Toast.makeText(getApplicationContext(),"请先登录！",Toast.LENGTH_LONG).show();
+                return;
+            }
             Intent intent = new Intent(getApplicationContext(),MediaRecorderActivity.class);
             startActivity(intent);
         }

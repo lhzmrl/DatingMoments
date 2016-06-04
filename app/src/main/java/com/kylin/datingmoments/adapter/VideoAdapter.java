@@ -18,14 +18,14 @@ import java.util.List;
 /**
  * Created by Kylin_admin on 2016/4/6.
  */
-public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.RecyclerViewHolder>{
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.RecyclerViewHolder>{
 
     private Context mContext;
     private List<VideoInfo> mListVideo;
 
     private OnCoverClickListener mOnCoverClickListener;
 
-    public VideoListAdapter(Context context, List<VideoInfo> listImageDetail,OnCoverClickListener onCoverClickListener){
+    public VideoAdapter(Context context, List<VideoInfo> listImageDetail, OnCoverClickListener onCoverClickListener){
         this.mContext = context;
         this.mListVideo = listImageDetail;
         mOnCoverClickListener = onCoverClickListener;

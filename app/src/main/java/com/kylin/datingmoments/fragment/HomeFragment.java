@@ -14,11 +14,10 @@ import android.widget.TextView;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.activity.VideoPlayerActivity;
 import com.kylin.datingmoments.adapter.EndlessRecyclerOnScrollListener;
-import com.kylin.datingmoments.adapter.VideoListAdapter;
+import com.kylin.datingmoments.adapter.VideoAdapter;
 import com.kylin.datingmoments.dao.DAO;
 import com.kylin.datingmoments.dao.DAOFactory;
 import com.kylin.datingmoments.entity.VideoInfo;
-import com.kylin.datingmoments.util.BitmapUtils;
 import com.kylin.datingmoments.util.Constant;
 import com.kylin.datingmoments.util.Logger;
 
@@ -37,7 +36,7 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private VideoListAdapter mAdapterRecycler;
+    private VideoAdapter mAdapterRecycler;
 
     private DAO mDAO = DAOFactory.getDAO();
 
@@ -51,12 +50,14 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
     private void initData() {
         mIsRefreshing = false;
         mListVideo = new ArrayList<VideoInfo>();
-        mAdapterRecycler = new VideoListAdapter(getApplicationContext(), mListVideo, new VideoListAdapter.OnCoverClickListener() {
+        mAdapterRecycler = new VideoAdapter(getApplicationContext(), mListVideo, new VideoAdapter.OnCoverClickListener() {
             @Override
             public void onClick(int position) {
                 VideoInfo info = mListVideo.get(position);
                 Intent intent = new Intent(getApplicationContext(), VideoPlayerActivity.class);
-                intent.putExtra(Constant.RECORD_VIDEO_PATH, info.getVideoPath()).putExtra(Constant.RECORD_VIDEO_CAPTURE, info.getCoverPath());
+                intent.putExtra(Constant.RECORD_VIDEO_PATH, info.getVideoPath());
+                intent.putExtra(Constant.RECORD_VIDEO_CAPTURE, info.getCoverPath());
+                intent.putExtra(Constant.RECORD_VIDEO_ID, info.getObjectId());
                 startActivity(intent);
             }
         });
