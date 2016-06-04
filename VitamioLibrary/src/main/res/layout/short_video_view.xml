@@ -58,4 +58,30 @@
         android:layout_height="4dp"
         android:layout_alignParentBottom="true"/>
 
+    <ImageView
+        android:id="@+id/short_video_view_iv_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/img_pause"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/short_video_view_tv_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="#AA666666"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat"
+            android:drawableTop="@drawable/img_repeat"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
+
 </RelativeLayout>

@@ -66,6 +66,7 @@ public class ShortVideoView extends RelativeLayout {
     private static final int STATE_CONTROLLER_SIMPLE = 0;
     private static final int STATE_CONTROLLER_DETAILE = 1;
     private static final int STATE_CONTROLLER_PAUSED = 2;
+    private static final int STATE_CONTROLLER_END = 3;
     private static final long MAX_PROGRESS = 1000;
     private static final int UPDATE_INTERVAL = 1000;
     private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("mm:ss", Locale.CANADA);
@@ -117,6 +118,8 @@ public class ShortVideoView extends RelativeLayout {
     private SeekBar mSbProgress;
     private ProgressBar mPbProgress;
     private ImageView mIvFullScreen;
+    private ImageView mIvPause;
+    private View mTvRepeat;
     private LinearLayout mLayoutController;
 
     private Context mContext;
@@ -218,6 +221,12 @@ public class ShortVideoView extends RelativeLayout {
 
     private MediaPlayer.OnCompletionListener mBaseOnCompletionListener = new MediaPlayer.OnCompletionListener() {
         public void onCompletion(MediaPlayer mp) {
+            mLayoutController.setVisibility(VISIBLE);
+            mPbProgress.setVisibility(GONE);
+            mIvPause.setVisibility(GONE);
+            mTvRepeat.setVisibility(VISIBLE);
+            mControllerHandler.removeMessages(HIND_PROGRESS);
+            mControllerState = STATE_CONTROLLER_END;
             mCurrentState = STATE_PLAYBACK_COMPLETED;
             mTargetState = STATE_PLAYBACK_COMPLETED;
             // TODO 更改控制界面状态
@@ -413,6 +422,8 @@ public class ShortVideoView extends RelativeLayout {
         mSbProgress = (SeekBar) findViewById(R.id.short_video_view_sb_progress);
         mIvFullScreen  = (ImageView) findViewById(R.id.short_video_view_iv_full_screen);
         mLayoutController = (LinearLayout) findViewById(R.id.short_video_view_layout_big_controller);
+        mIvPause = (ImageView) findViewById(R.id.short_video_view_iv_pause);
+        mTvRepeat = findViewById(R.id.short_video_view_tv_repeat);
 
         mSurfaceView.setOnClickListener(new OnClickListener() {
             @Override
@@ -426,11 +437,22 @@ public class ShortVideoView extends RelativeLayout {
                         break;
                     case STATE_CONTROLLER_DETAILE:
                         pause();
+                        mIvPause.setVisibility(VISIBLE);
                         mControllerHandler.removeMessages(HIND_PROGRESS);
                         mControllerState = STATE_CONTROLLER_PAUSED;
                         break;
                     case STATE_CONTROLLER_PAUSED:
                         resume();
+                        mIvPause.setVisibility(GONE);
+                        mControllerHandler.sendEmptyMessageDelayed(HIND_PROGRESS,3000);
+                        mControllerState = STATE_CONTROLLER_DETAILE;
+                        break;
+                    case STATE_CONTROLLER_END:
+                        mMediaPlayer.seekTo(0);
+                        mLayoutController.setVisibility(VISIBLE);
+                        mPbProgress.setVisibility(GONE);
+                        mIvPause.setVisibility(GONE);
+                        mTvRepeat.setVisibility(GONE);
                         mControllerHandler.sendEmptyMessageDelayed(HIND_PROGRESS,3000);
                         mControllerState = STATE_CONTROLLER_DETAILE;
                         break;

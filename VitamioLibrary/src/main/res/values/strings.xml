@@ -18,5 +18,6 @@
     <string name="VideoView_error_button">OK</string>
     <string name="mediacontroller_play_pause">Play/Pause</string>
     <string name="default_time_text">--:--</string>
+    <string name="repeat">重播</string>
 
 </resources>
