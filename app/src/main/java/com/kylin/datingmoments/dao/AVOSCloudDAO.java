@@ -15,8 +15,10 @@ import com.kylin.datingmoments.activity.MainActivity;
 import com.kylin.datingmoments.common.TableName;
 import com.kylin.datingmoments.entity.Comment;
 import com.kylin.datingmoments.entity.DMUser;
+import com.kylin.datingmoments.entity.FavoriteRelationship;
 import com.kylin.datingmoments.entity.UploadVideoResult;
 import com.kylin.datingmoments.entity.VideoInfo;
+import com.kylin.datingmoments.entity.WatchRelationship;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.moments.WechatMoments;
+import io.vov.vitamio.provider.MediaStore;
 
 /**
  * 由AVOSCloud实现的云端DAO操作。
@@ -145,9 +148,9 @@ public class AVOSCloudDAO implements DAO {
     public List<Comment> getCommentList(String videoId) {
         List<AVObject> listAVObject = null;
         List<Comment> listComment = new ArrayList<Comment>();
-        AVObject video = AVObject.createWithoutData(TableName.VIDEO,videoId);
+        AVObject video = AVObject.createWithoutData(TableName.VIDEO, videoId);
         AVQuery<AVObject> query = new AVQuery<>(TableName.COMMENT);
-        query.whereEqualTo(Comment.VIDEO,video);
+        query.whereEqualTo(Comment.VIDEO, video);
         query.include(Comment.USER);
         try {
             listAVObject = query.find();
@@ -155,13 +158,130 @@ public class AVOSCloudDAO implements DAO {
             e.printStackTrace();
             return null;
         }
-        if (listAVObject ==null || listAVObject.size()==0){
+        if (listAVObject == null || listAVObject.size() == 0) {
             return null;
         }
-        for (AVObject o:listAVObject){
+        for (AVObject o : listAVObject) {
             listComment.add(Comment.parse(o));
         }
         return listComment;
+    }
+
+    @Override
+    public void tryRecordPlayNum(String videoId, String userId) {
+        AVObject video = AVObject.createWithoutData(TableName.VIDEO, videoId);
+        AVObject user = AVObject.createWithoutData(TableName.USER, userId);
+        List<AVObject> listAVObject = null;
+        final AVQuery<AVObject> videoQuery = new AVQuery<>(TableName.WATCH_RELATIONSHIP);
+        videoQuery.whereEqualTo(WatchRelationship.VIDEO, video);
+        final AVQuery<AVObject> userQuery = new AVQuery<>(TableName.WATCH_RELATIONSHIP);
+        userQuery.whereEqualTo(WatchRelationship.USER, user);
+        AVQuery<AVObject> query = AVQuery.and(Arrays.asList(videoQuery, userQuery));
+        try {
+            listAVObject = query.find();
+        } catch (AVException e) {
+            e.printStackTrace();
+        }
+        if (listAVObject != null && listAVObject.size() > 0) {
+            return;
+        }
+        AVObject watchRelationship = new AVObject(TableName.WATCH_RELATIONSHIP);
+        watchRelationship.put(WatchRelationship.VIDEO, video);
+        watchRelationship.put(WatchRelationship.USER, user);
+        try {
+            watchRelationship.save();
+        } catch (AVException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    @Override
+    public int getPalyNum(String videoId) {
+        List<AVObject> listAVObject = null;
+        AVObject video = AVObject.createWithoutData(TableName.VIDEO, videoId);
+        final AVQuery<AVObject> videoQuery = new AVQuery<>(TableName.WATCH_RELATIONSHIP);
+        videoQuery.whereEqualTo(WatchRelationship.VIDEO, video);
+        try {
+            listAVObject = videoQuery.find();
+        } catch (AVException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        if (listAVObject == null)
+            return 0;
+        return listAVObject.size();
+    }
+
+    @Override
+    public AVObject isFavoriteTheVideo(String videoId, String userId) {
+        AVObject video = AVObject.createWithoutData(TableName.VIDEO, videoId);
+        AVObject user = AVObject.createWithoutData(TableName.USER, userId);
+        List<AVObject> listAVObject = null;
+        final AVQuery<AVObject> videoQuery = new AVQuery<>(TableName.FAVORITE_RELATIONSHIP);
+        videoQuery.whereEqualTo(WatchRelationship.VIDEO, video);
+        final AVQuery<AVObject> userQuery = new AVQuery<>(TableName.FAVORITE_RELATIONSHIP);
+        userQuery.whereEqualTo(WatchRelationship.USER, user);
+        AVQuery<AVObject> query = AVQuery.and(Arrays.asList(videoQuery, userQuery));
+        try {
+            listAVObject = query.find();
+        } catch (AVException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (listAVObject != null && listAVObject.size() > 0) {
+            AVObject result = listAVObject.get(0);
+            return result;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean favoriteVideo(String videoId, String userId, boolean isFavorite) {
+        AVObject result = isFavoriteTheVideo(videoId, userId);
+        if ((isFavorite && result != null) || (!isFavorite && result == null))
+            return true;
+        if (!isFavorite) {
+            try {
+                result.delete();
+            } catch (AVException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        AVObject video = AVObject.createWithoutData(TableName.VIDEO, videoId);
+        AVObject user = AVObject.createWithoutData(TableName.USER, userId);
+        AVObject favoriteRelationship = new AVObject(TableName.FAVORITE_RELATIONSHIP);
+        favoriteRelationship.put(FavoriteRelationship.VIDEO, video);
+        favoriteRelationship.put(FavoriteRelationship.USER, user);
+        try {
+            favoriteRelationship.save();
+        } catch (AVException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (favoriteRelationship.getObjectId().equals(""))
+            return false;
+        return true;
+
+    }
+
+    @Override
+    public int getFavoriteNum(String videoId) {
+        AVObject video = AVObject.createWithoutData(TableName.VIDEO, videoId);
+        List<AVObject> listAVObject = null;
+        final AVQuery<AVObject> videoQuery = new AVQuery<>(TableName.FAVORITE_RELATIONSHIP);
+        videoQuery.whereEqualTo(WatchRelationship.VIDEO, video);
+        try {
+            listAVObject = videoQuery.find();
+        } catch (AVException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        if (listAVObject==null)
+            return 0;
+        return listAVObject.size();
     }
 
     @Override
@@ -170,8 +290,8 @@ public class AVOSCloudDAO implements DAO {
     }
 
     @Override
-    public void getVideoList(GetVideoCallback getVideoCallback) {
-        new GetVideoListTask(getVideoCallback).execute();
+    public void getVideoList(int pageNum, int itemPerPage, GetVideoCallback getVideoCallback) {
+        new GetVideoListTask(pageNum, itemPerPage, getVideoCallback).execute();
     }
 
     private class ThirdPartyLoginTask extends AsyncTask<Platform, Void, DMUser> {
@@ -220,7 +340,7 @@ public class AVOSCloudDAO implements DAO {
         }
     }
 
-    private class UpLoadTask extends AsyncTask<Void, Void, Boolean> {
+    private class UpLoadTask extends AsyncTask<Void, Void, VideoInfo> {
 
         UploadVideoCallback mUploadVideoCallback;
         String mVideoPath;
@@ -237,13 +357,13 @@ public class AVOSCloudDAO implements DAO {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected VideoInfo doInBackground(Void... params) {
             String jsonString = DataLogic.getInstance().uploadVideo(mVideoPath, mCoverPath);
             if (jsonString == null)
-                return false;
+                return null;
             UploadVideoResult result = JSONObject.parseArray(jsonString, UploadVideoResult.class).get(0);
             if (result == null)
-                return false;
+                return null;
             AVObject user = AVObject.createWithoutData(TableName.USER, mDMUser.getObjectId());
             AVObject video = new AVObject(TableName.VIDEO);
             video.put(VideoInfo.VIDEO_PATH, result.videoPath);
@@ -254,15 +374,15 @@ public class AVOSCloudDAO implements DAO {
                 video.save();
             } catch (AVException e) {
                 e.printStackTrace();
-                return false;
+                return null;
             }
-            return true;
+            return VideoInfo.parse(video);
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
-            if (result)
-                mUploadVideoCallback.onSuccess();
+        protected void onPostExecute(VideoInfo result) {
+            if (result!=null && !result.getObjectId().equals(""))
+                mUploadVideoCallback.onSuccess(result);
             else {
                 mUploadVideoCallback.onError();
             }
@@ -271,9 +391,13 @@ public class AVOSCloudDAO implements DAO {
 
     private class GetVideoListTask extends AsyncTask<Void, Void, List<VideoInfo>> {
 
+        int mPageNum;
+        int mItemPerPage;
         GetVideoCallback mGetVideoCallback;
 
-        protected GetVideoListTask(GetVideoCallback getVideoCallback) {
+        protected GetVideoListTask(int pageNum, int itemPerPage, GetVideoCallback getVideoCallback) {
+            mPageNum = pageNum;
+            mItemPerPage = itemPerPage;
             mGetVideoCallback = getVideoCallback;
         }
 
@@ -282,6 +406,9 @@ public class AVOSCloudDAO implements DAO {
             List<VideoInfo> videoList = new ArrayList<VideoInfo>();
             AVQuery<AVObject> query = new AVQuery<>(TableName.VIDEO);
             query.include("user");
+            query.limit(mItemPerPage);
+            query.skip(mPageNum * mItemPerPage);
+//            query.orderByDescending(VideoInfo.HOT);
             try {
                 List<AVObject> list = query.find();
                 for (AVObject o : list) {
@@ -302,4 +429,5 @@ public class AVOSCloudDAO implements DAO {
             mGetVideoCallback.onSuccess(videoInfos);
         }
     }
+
 }

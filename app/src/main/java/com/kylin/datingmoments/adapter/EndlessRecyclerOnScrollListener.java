@@ -1,5 +1,6 @@
 package com.kylin.datingmoments.adapter;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -7,57 +8,52 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 public abstract class EndlessRecyclerOnScrollListener extends
         RecyclerView.OnScrollListener {
 
-    private int previousTotal = 0;
-    private boolean loading = true;
-    int firstVisibleItem, visibleItemCount, totalItemCount;
-    private int currentPage = 1;
-    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    @Override
+    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        //当前RecyclerView显示出来的最后一个的item的position
+        int lastPosition = -1;
 
-    public EndlessRecyclerOnScrollListener(
-            StaggeredGridLayoutManager staggeredGridLayoutManager) {
-        this.mStaggeredGridLayoutManager = staggeredGridLayoutManager;
+        //当前状态为停止滑动状态SCROLL_STATE_IDLE时
+        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof GridLayoutManager) {
+                //通过LayoutManager找到当前显示的最后的item的position
+                lastPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
+            } else if (layoutManager instanceof LinearLayoutManager) {
+                lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                //因为StaggeredGridLayoutManager的特殊性可能导致最后显示的item存在多个，所以这里取到的是一个数组
+                //得到这个数组后再取到数组中position值最大的那个就是最后显示的position值了
+                int[] lastPositions = new int[((StaggeredGridLayoutManager) layoutManager).getSpanCount()];
+                ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(lastPositions);
+                lastPosition = findMax(lastPositions);
+            }
+
+            //时判断界面显示的最后item的position是否等于itemCount总数-1也就是最后一个item的position
+            //如果相等则说明已经滑动到最后了
+            if (lastPosition == recyclerView.getLayoutManager().getItemCount() - 1) {
+                onLoadMore();
+            }
+
+        }
     }
 
     @Override
-
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        super.onScrolled(recyclerView, dx, dy);
-
-
-//        visibleItemCount = recyclerView.getChildCount();
-//
-//        totalItemCount = mLinearLayoutManager.getItemCount();
-//
-//        firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
-//
-//
-//        if (loading) {
-//
-//            if (totalItemCount > previousTotal) {
-//
-//                loading = false;
-//
-//                previousTotal = totalItemCount;
-//
-//            }
-//
-//        }
-//
-//        if (!loading
-//
-//                && (totalItemCount - visibleItemCount) <= firstVisibleItem) {
-//
-//            currentPage++;
-//
-//            onLoadMore(currentPage);
-//
-//            loading = true;
-//
-//        }
 
     }
 
+    //找到数组中的最大值
+    private int findMax(int[] lastPositions) {
+        int max = lastPositions[0];
+        for (int value : lastPositions) {
+            if (value > max) {
+                max = value;
+            }
+        }
+        return max;
+    }
 
-    public abstract void onLoadMore(int currentPage);
+    public abstract void onLoadMore();
 
 }

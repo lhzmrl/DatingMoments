@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kylin.datingmoments.activity.ShareActivity">
+
+    <include
+        android:id="@+id/act_share_title"
+        layout="@layout/common_actionbar"/>
+
+    <TextView
+        android:id="@+id/act_share_tv_success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/act_share_title"
+        android:text="发布成功"
+        android:layout_centerHorizontal="true"
+        android:textSize="40sp"
+        android:textColor="#232354"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/act_share_tv_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/act_share_tv_success"
+        android:text="分享到："
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_below="@id/act_share_tv_share">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/act_share_btn_tencent"
+                style="@style/ThirdPartyLoginButton"
+                android:background="@drawable/sel_btn_login_tencent"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/act_share_btn_wechat"
+                style="@style/ThirdPartyLoginButton"
+                android:background="@drawable/sel_btn_login_wechat"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/act_share_btn_weibo"
+                style="@style/ThirdPartyLoginButton"
+                android:background="@drawable/sel_btn_login_weibo"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

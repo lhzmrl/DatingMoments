@@ -49,4 +49,11 @@
         <item name="android:layout_weight">1.0</item>
     </style>
 
+    <style name="ShareCheckBox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:padding">5dp</item>
+    </style>
+
 </resources>

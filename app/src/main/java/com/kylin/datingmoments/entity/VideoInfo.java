@@ -4,10 +4,12 @@ import com.avos.avoscloud.AVObject;
 import com.kylin.datingmoments.common.NetConfig;
 import com.kylin.datingmoments.common.TableName;
 
+import java.io.Serializable;
+
 /**
  * Created by kylin on 16-5-29.
  */
-public class VideoInfo {
+public class VideoInfo implements Serializable{
 
     private static final String VIDEO_SERVER_ADDRESS = "http://"+NetConfig.VIDEO_SERVER;
 
@@ -17,13 +19,14 @@ public class VideoInfo {
     public static final String COVER_PATH= "coverPath";
     public static final String DESC = "desc";
     public static final String USER_ICON = "userIcon";
-
+    public static final String HOT = "hot";
     private String objectId;
     private String userName;
     private String videoPath;
     private String coverPath;
     private String desc;
     private String userIcon;
+    private float hot;
 
     public String getObjectId() {
         return objectId;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,11 +11,68 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"/>
 
+    <LinearLayout
+        android:id="@+id/act_video_player_video_layout_temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_below="@id/act_video_player_video_view"
+        android:paddingBottom="3dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/act_video_player_sd_user_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="4dp"
+            fresco:roundAsCircle="true"
+            fresco:roundingBorderColor="@color/light_background"
+            fresco:roundingBorderWidth="4dp"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/act_video_player_tv_nick_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用户名"
+                android:textColor="@color/light_text_color"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/act_video_player_tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="内容"
+                android:lines="1"
+                android:ellipsize = "end"
+                android:textColor="@color/dark_text_color"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/act_video_player_tv_favorite"
+            android:layout_width="50dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/img_feed_like_num"
+            android:textColor="@color/dark_text_color"
+            android:textSize="18sp"
+            android:text="0"/>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/act_video_player_rv_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/act_video_player_video_view"
+        android:layout_below="@id/act_video_player_video_layout_temp"
         android:background="@color/dark_background"/>
 
     <LinearLayout
@@ -38,6 +96,14 @@
             android:layout_height="wrap_content"
             android:text="@string/send_out"
             android:layout_margin="2dp"/>
+
+        <ImageView
+            android:id="@+id/act_video_player_iv_favorite"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/img_feed_like_default"
+            android:scaleType="fitXY"
+            android:layout_margin="5dp"/>
     </LinearLayout>
 
 </RelativeLayout>

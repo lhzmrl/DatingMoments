@@ -12,18 +12,32 @@
         android:id="@+id/act_release_title"
         layout="@layout/common_actionbar"/>
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/act_release_iv_cover"
-        android:layout_width="150dp"
+    <RelativeLayout
+        android:id="@+id/act_release_layout_cover"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@id/act_release_title"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@id/act_release_title">
+
+        <ImageView
+            android:id="@+id/act_release_iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"/>
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/act_release_iv_cover"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
 
     <EditText
         android:id="@+id/act_release_et_desc"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@id/act_release_iv_cover"
+        android:layout_below="@id/act_release_layout_cover"
         android:background="@color/light_background"
         android:gravity="left|right"
         android:hint="添加描述"
@@ -43,12 +57,33 @@
         />
 
     <View
+        android:id="@+id/act_release_view_shadow"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_above="@id/com_tab_ll"
         android:layout_below="@id/act_release_tv_left_word_num"
         android:layout_marginTop="5dp"
         android:background="@color/shadow"/>
+
+    <RelativeLayout
+        android:layout_below="@id/act_release_view_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/act_release_cb_weibo"
+                style="@style/ShareCheckBox"
+                android:background="@drawable/sel_share_weibo"/>
+            <CheckBox
+                android:id="@+id/act_release_cb_moments"
+                style="@style/ShareCheckBox"
+                android:background="@drawable/sel_share_monents"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/act_release_layout_release"
@@ -71,9 +106,9 @@
 
     <View
         android:id="@+id/act_release_view_void"
-        android:layout_below="@id/act_release_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/act_release_title"
         android:background="@color/light_background"
         android:visibility="gone"/>
 

@@ -29,7 +29,11 @@ import java.util.List;
  */
 public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int ITEM_NUM_PER_PAGE =  20;
+
     private boolean mIsRefreshing;
+
+    private int mPageNum;
 
     private List<VideoInfo> mListVideo;
 
@@ -49,6 +53,7 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
 
     private void initData() {
         mIsRefreshing = false;
+        mPageNum = 0;
         mListVideo = new ArrayList<VideoInfo>();
         mAdapterRecycler = new VideoAdapter(getApplicationContext(), mListVideo, new VideoAdapter.OnCoverClickListener() {
             @Override
@@ -80,9 +85,9 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
         mRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelOffset(R.dimen.video_cover_padding)));
-        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(staggeredGridLayoutManager) {
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
-            public void onLoadMore(int currentPage) {
+            public void onLoadMore() {
                 loadMoreDate();
             }
         });
@@ -90,13 +95,29 @@ public class HomeFragment extends LazyFragment implements SwipeRefreshLayout.OnR
     }
 
     private void loadMoreDate() {
+        Logger.i("加载更多！");
+        mPageNum ++;
+        mDAO.getVideoList(mPageNum,ITEM_NUM_PER_PAGE,new DAO.GetVideoCallback() {
+            @Override
+            public void onSuccess(List<VideoInfo> result) {
+                mListVideo.addAll(result);
+                mAdapterRecycler.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+                Logger.e("加载数据完成！");
+            }
 
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     @Override
     public void onRefresh() {
+        mPageNum = 0;
         Logger.e("开始加载数据！");
-        mDAO.getVideoList(new DAO.GetVideoCallback() {
+        mDAO.getVideoList(mPageNum,ITEM_NUM_PER_PAGE,new DAO.GetVideoCallback() {
             @Override
             public void onSuccess(List<VideoInfo> result) {
                 mListVideo.clear();

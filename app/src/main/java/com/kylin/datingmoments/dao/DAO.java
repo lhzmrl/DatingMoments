@@ -1,6 +1,7 @@
 package com.kylin.datingmoments.dao;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.SaveCallback;
 import com.kylin.datingmoments.entity.Comment;
 import com.kylin.datingmoments.entity.DMUser;
@@ -66,7 +67,7 @@ public interface DAO {
      * 获取视频
      * @param getVideoCallback 获取视频毁掉
      */
-    public void getVideoList(GetVideoCallback getVideoCallback);
+    public void getVideoList(int pageNum,int itemPerPage,GetVideoCallback getVideoCallback);
 
     /**
      * 发送评论
@@ -82,6 +83,44 @@ public interface DAO {
     public List<Comment> getCommentList(String videoId);
 
     /**
+     * 记录播放
+     * @param videoId 视频ID
+     * @param userId 用户ID
+     */
+    public void tryRecordPlayNum(String videoId,String userId);
+
+    /**
+     * 获取播放次数
+     * @param videoId
+     * @return
+     */
+    public int getPalyNum(String videoId);
+
+    /**
+     * 是否赞了某个视频
+     * @param videoId 视频ID
+     * @param userId 用户ID
+     * @return 不存在赞关系返回null，否则返回赞关系对象
+     */
+    public AVObject isFavoriteTheVideo(String videoId, String userId);
+
+    /**
+     * 赞或取消赞某个视频
+     * @param videoId 视频ID
+     * @param userId 用户ID
+     * @param isFavorite 是否喜欢
+     * @return 操作是否成功
+     */
+    public boolean favoriteVideo(String videoId,String userId,boolean isFavorite);
+
+    /**
+     * 获取视频赞个数
+     * @param videoId 视频ID
+     * @return 赞个数
+     */
+    public int getFavoriteNum(String videoId);
+
+    /**
      * 用户登录回调
      */
     interface LoginCallback{
@@ -93,7 +132,7 @@ public interface DAO {
      * 视频上传回调
      */
     interface UploadVideoCallback{
-        public void onSuccess();
+        public void onSuccess(VideoInfo video);
         public void onError();
     }
 

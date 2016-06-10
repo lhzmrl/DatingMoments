@@ -7,6 +7,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,8 +20,12 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVObject;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.kylin.datingmoments.R;
 import com.kylin.datingmoments.adapter.CommentAdapter;
 import com.kylin.datingmoments.adapter.EndlessRecyclerOnScrollListener;
@@ -45,6 +50,7 @@ import io.vov.vitamio.widget.ShortVideoView;
  */
 public class VideoPlayerActivity extends BaseActivity {
 
+    private boolean mIsFavoriting;
     /**
      * 播放路径
      */
@@ -54,12 +60,19 @@ public class VideoPlayerActivity extends BaseActivity {
      */
     private String mCoverPath;
     private String mVideoId;
+    private DMUser mUser;
+    private boolean mIsFavorite;
 
     private List<Comment> mListComment;
 
+    private SimpleDraweeView mSDVIcon;
+    private TextView mTvNickName;
+    private TextView mTvDesc;
+    private TextView mTvFavorite;
     private ShortVideoView mVideoView;
     private EditText mEtComment;
     private Button mBtnSendComment;
+    private ImageView mIvFavorite;
     private RecyclerView mRvComment;
 
     private CommentAdapter mAdapterComment;
@@ -84,19 +97,34 @@ public class VideoPlayerActivity extends BaseActivity {
     }
 
     private void initDate() {
+        mUser = ((DMApplication)getApplicationContext()).getUser();
         mListComment = new ArrayList<Comment>();
         mAdapterComment = new CommentAdapter(getApplicationContext(), mListComment);
     }
 
     private void initView() {
+        mSDVIcon = (SimpleDraweeView) findViewById(R.id.act_video_player_sd_user_icon);
+        mSDVIcon.setImageURI(Uri.parse(mUser.getUserIcon()));
+        mTvNickName = (TextView) findViewById(R.id.act_video_player_tv_nick_name);
+        mTvNickName.setText(mUser.getNickName());
+        mTvDesc = (TextView) findViewById(R.id.act_video_player_tv_desc);
+        mTvFavorite = (TextView) findViewById(R.id.act_video_player_tv_favorite);
         mVideoView = (ShortVideoView) findViewById(R.id.act_video_player_video_view);
         mEtComment = (EditText) findViewById(R.id.act_video_player_et_msg);
+        mIvFavorite = (ImageView) findViewById(R.id.act_video_player_iv_favorite);
+        mIvFavorite.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mIsFavoriting)
+                    return;
+                new FavoriteTask().execute(!mIsFavorite);
+            }
+        });
         mBtnSendComment = (Button) findViewById(R.id.act_video_player_btn_send);
         mBtnSendComment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DMUser user = ((DMApplication)getApplicationContext()).getUser();
-                if (user==null){
+                if (mUser==null){
                     Toast.makeText(getApplicationContext(),"请先登录！",Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -106,7 +134,7 @@ public class VideoPlayerActivity extends BaseActivity {
                 Comment comment = new Comment();
                 comment.setVideo(mVideoId);
                 comment.setComment(msg);
-                comment.setUser(user.getObjectId());
+                comment.setUser(mUser.getObjectId());
                 new SendCommentTask().execute(comment);
                 mEtComment.setText("");
             }
@@ -123,6 +151,10 @@ public class VideoPlayerActivity extends BaseActivity {
 //        });
         mRvComment.setAdapter(mAdapterComment);
         new GetCommentTask().execute(mVideoId);
+        new PlayRecordTask().execute(mVideoId,mUser.getObjectId());
+        new GetPlayNumTask().execute(mVideoId);
+        new GetFavoriteTask().execute();
+        new GetFavoriteNumTask().execute();
         playFunction();
     }
 
@@ -130,6 +162,94 @@ public class VideoPlayerActivity extends BaseActivity {
         mVideoView.setVideoPath(mPath);
         mVideoView.requestFocus();
 
+    }
+
+    private class PlayRecordTask extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... params) {
+            String videoId = params[0];
+            String userId = params[1];
+            mDAO.tryRecordPlayNum(videoId,userId);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    private class GetPlayNumTask extends AsyncTask<String,Void,Integer>{
+        @Override
+        protected Integer doInBackground(String... params) {
+
+            return mDAO.getPalyNum(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            mTvDesc.setText(integer+"人观看");
+        }
+    }
+
+    private class GetFavoriteTask extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            AVObject result = mDAO.isFavoriteTheVideo(mVideoId,mUser.getObjectId());
+            return result==null?false:true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            mIsFavorite = aBoolean;
+            mIvFavorite.setImageResource(mIsFavorite?R.drawable.img_feed_like_checked:R.drawable.img_feed_like_default);
+        }
+
+    }
+
+    private class FavoriteTask extends AsyncTask<Boolean,Void,Boolean>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mIsFavoriting = true;
+
+        }
+
+        @Override
+        protected Boolean doInBackground(Boolean... params) {
+
+            return mDAO.favoriteVideo(mVideoId, mUser.getObjectId(),params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            mIsFavoriting = false;
+            if (result) {
+                mIsFavorite=!mIsFavorite;
+                mIvFavorite.setImageResource(mIsFavorite?R.drawable.img_feed_like_checked:R.drawable.img_feed_like_default);
+            }
+            new GetFavoriteNumTask().execute();
+        }
+    }
+
+    private class GetFavoriteNumTask extends AsyncTask<Void,Void,Integer>{
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            return mDAO.getFavoriteNum(mVideoId);
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            mTvFavorite.setText(integer.toString());
+        }
     }
 
     private class GetCommentTask extends AsyncTask<String, Void, List<Comment>> {
